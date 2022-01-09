@@ -9,6 +9,12 @@
  <script src="script.js"></script>
 </head>
 <body>
- 
+ 		<p>
+			<input onclick="startstop()" type="button" value="Start Gravity" id="startBtn" />
+			<input onclick="changeMode()" type="button" value="Create Mass" id="modeBtn" />
+			<input onclick="reset()" type="button" value="Reset Game" id="restartBtn" />
+		</p>
+
+		<canvas id="myCanvas" width="1200" height="800" onmousemove="findMouse(event)"> 
 </body>
 </html>
