@@ -126,6 +126,7 @@ function draw(){
     for (let i = 0;i < selected.length; i++){
         ctx?.beginPath()
         ctx?.arc(masses[selected[i]].position.x,masses[selected[i]].position.y, 12,0,2*Math.PI)
+        ctx?.stroke()
 
     }
 
