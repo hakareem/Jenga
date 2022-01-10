@@ -18,6 +18,8 @@ class Spring{
     a: Mass;
     b: Mass;
     k: number;
+    position: Vector = new Vector(0,0)
+
 
     constructor(a:Mass,b:Mass,k:number){
         this.a = a;
@@ -45,6 +47,7 @@ class Vector{
 let canvas = <HTMLCanvasElement>document.getElementById("myCanvas")
 canvas?.addEventListener("mousedown",mouseDown)
 canvas?.addEventListener("mouseup",mouseUp)
+canvas?.addEventListener("mousemove", mouseMove)
 let ctx = canvas.getContext("2d")
 let rect = canvas.getBoundingClientRect()
 
@@ -52,7 +55,8 @@ let rect = canvas.getBoundingClientRect()
 let masses:Mass[] = []
 let gravity = new Vector(0,4)
 let springs:Spring[]=[]
-let selected:[] | any = []
+let selectedMass:[] | any = []
+let selectedSpring: [] | any = []
 let mouseX=50
 let mouseY=50
 let mousedown=false
@@ -67,7 +71,6 @@ function changeMode(){
     if (mode === 1){
         (<HTMLInputElement>document.getElementById("modeBtn")).value= "Connect Spring"
     }
-
 }
 
 function findMouse(e:MouseEvent){
@@ -85,29 +88,51 @@ function mouseDown(){
     if (mode === 1){
         let distance = 100
         for (let i =0; i < masses.length; i++){
-            if (selected.length === 0 || selected[0] != i){
+            if (selectedMass.length === 0 || selectedMass[0] != i){
                 let xDistance = masses[i].position.x - mouseX
                 let yDistance = masses[i].position.y - mouseY
                 if (xDistance*xDistance + yDistance*yDistance < distance){
-                    selected[selected.length] = i
+                    selectedMass[selectedMass.length] = i
                 }
             }
         }
-        if (selected.length === 2){
-            masses[selected[0]].connect(masses[selected[1]])
-            selected = []
+        if (selectedMass.length === 2){
+            masses[selectedMass[0]].connect(masses[selectedMass[1]])
+            selectedMass = []
         }
         draw()
     }
 }
+
+let cursor:Vector = new Vector(0,0)
+
+function mouseMove(e:MouseEvent){
+     for (let j = 0; j < springs.length; j++){
+       let x1 = springs[j].a.position.x 
+       let y1 = springs[j].a.position.y
+       let x2 = springs[j].b.position.x 
+       let y2 = springs[j].b.position.y 
+
+      let gradient = (y2 - y1) / (x2 -x1) 
+      cursor.x = mouseX 
+      cursor.y = (mouseX - x1) * gradient + y1
+      
+     }
+     draw()
+ }
+
 function mouseUp(){
     mousedown = false
-
 }
 
 function draw(){
     ctx?.clearRect(0,0,canvas.width,canvas.height)
     ctx!.strokeStyle="white"
+     ctx?.beginPath()
+     ctx?.arc(cursor.x,cursor.y,6,0,2*Math.PI)
+     ctx?.stroke()
+    ctx!.strokeStyle="magenta"
+
     for (let i = 0; i<masses.length; i++){
         ctx?.beginPath()
         ctx?.arc(masses[i].position.x,masses[i].position.y,12,0,2*Math.PI)
@@ -123,15 +148,21 @@ function draw(){
         ctx?.stroke()
     }
     ctx!.strokeStyle="red"
-    for (let i = 0;i < selected.length; i++){
+    for (let i = 0;i < selectedMass.length; i++){
         ctx?.beginPath()
-        ctx?.arc(masses[selected[i]].position.x,masses[selected[i]].position.y, 12,0,2*Math.PI)
-
+        ctx?.arc(masses[selectedMass[i]].position.x,masses[selectedMass[i]].position.y, 12,0,2*Math.PI)
+        ctx?.stroke()
     }
 
-
-
+      ctx!.strokeStyle="purple"
+    for (let i = 0;i < selectedSpring.length; i++){
+        ctx?.beginPath()
+        ctx?.arc(masses[selectedSpring[i]].position.x,masses[selectedSpring[i]].position.y, 12,0,2*Math.PI)
+        ctx?.stroke()
+    }
 }
+
+
 function reset(){
     masses = []
     springs = []
