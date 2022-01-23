@@ -106,18 +106,21 @@ function mouseDown(){
 
 let cursor:Vector = new Vector(0,0)
 
+// function calculateDistance (spring,mouseX,mouseY){
+//     return Math.sqrt(Math.pow(mouseX - (spring)))
+// }
 function mouseMove(e:MouseEvent){
      for (let j = 0; j < springs.length; j++){
-       let x1 = springs[j].a.position.x 
-       let y1 = springs[j].a.position.y
-       let x2 = springs[j].b.position.x 
-       let y2 = springs[j].b.position.y 
+    let x1 = springs[j].a.position.x 
+    let y1 = springs[j].a.position.y
+    let x2 = springs[j].b.position.x 
+    let y2 = springs[j].b.position.y 
 
       let gradient = (y2 - y1) / (x2 -x1) 
       cursor.x = mouseX 
-      cursor.y = (mouseX - x1) * gradient + y1
-      
-     }
+      cursor.y = (mouseX - x1) * gradient + y1 
+    //   let mdist = Math.sqrt(cursor.x - x1) + (cursor.y + y1)
+           }
      draw()
  }
 
@@ -128,9 +131,9 @@ function mouseUp(){
 function draw(){
     ctx?.clearRect(0,0,canvas.width,canvas.height)
     ctx!.strokeStyle="white"
-     ctx?.beginPath()
-     ctx?.arc(cursor.x,cursor.y,6,0,2*Math.PI)
-     ctx?.stroke()
+    ctx?.beginPath()
+    ctx?.arc(cursor.x,cursor.y,6,0,2*Math.PI)
+    ctx?.stroke()
     ctx!.strokeStyle="magenta"
 
     for (let i = 0; i<masses.length; i++){

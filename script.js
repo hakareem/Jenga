@@ -84,6 +84,9 @@ function mouseDown() {
     }
 }
 let cursor = new Vector(0, 0);
+// function calculateDistance (spring,mouseX,mouseY){
+//     return Math.sqrt(Math.pow(mouseX - (spring)))
+// }
 function mouseMove(e) {
     for (let j = 0; j < springs.length; j++) {
         let x1 = springs[j].a.position.x;
@@ -93,6 +96,7 @@ function mouseMove(e) {
         let gradient = (y2 - y1) / (x2 - x1);
         cursor.x = mouseX;
         cursor.y = (mouseX - x1) * gradient + y1;
+        //   let mdist = Math.sqrt(cursor.x - x1) + (cursor.y + y1)
     }
     draw();
 }
